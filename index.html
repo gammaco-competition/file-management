@@ -231,23 +231,24 @@
       row.forEach((cell, i) => {
         if (i === 1) return;
         if (String(cell).startsWith('http')) {
-  // ปรับปรุงปุ่ม Open: เพิ่มสี, ตัวหนา, และเงา
-  html += `<td class="px-3 text-center">
+   // เพิ่ม text-center เข้าไปที่ <td> เพื่อให้ปุ่มอยู่กึ่งกลางคอลัมน์
+   html += `<td class="text-center px-3" style="vertical-align: middle;">
             <a href="${cell}" target="_blank" 
                style="
                 display: inline-block;
-                background: linear-gradient(135deg, #1fa87a, #157347); /* สีเขียว gradient */
+                background: linear-gradient(135deg, #1fa87a, #157347);
                 color: white !important;
-                padding: 6px 16px;
+                padding: 6px 20px;
                 border-radius: 20px;
                 text-decoration: none;
-                font-weight: bold; /* ตัวหนังสือหนา */
+                font-weight: bold;
                 font-size: 14px;
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* เพิ่ม Drop Shadow */
-                transition: all 0.3s ease;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+                transition: 0.3s;
+                min-width: 80px; /* กำหนดความกว้างขั้นต่ำให้ปุ่มดูสมดุล */
                "
-               onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 15px rgba(0,0,0,0.2)';"
-               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 10px rgba(0,0,0,0.15)';"
+               onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 12px rgba(0,0,0,0.2)';"
+               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)';"
             >Open</a>
           </td>`;
 } else {
