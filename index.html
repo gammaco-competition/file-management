@@ -37,6 +37,22 @@
     .page-section.active { display: block; }
     .loader { border: 3px solid #f3f3f3; border-top: 3px solid var(--primary-color); border-radius: 50%; width: 35px; height: 35px; animation: spin 1s linear infinite; margin: 50px auto; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .btn-open-modern {
+     display: inline-block;
+     background: #1fa87a;
+     color: white !important;
+     padding: 5px 15px;
+     border-radius: 50px;
+     text-decoration: none;
+     font-weight: bold; /* ตัวหนา */
+     box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* เงา */
+     transition: 0.3s;
+    }
+   .btn-open-modern:hover {
+     transform: translateY(-2px);
+     box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+     background: #157347;
+   }
   </style>
 </head>
 <body>
@@ -215,8 +231,26 @@
       row.forEach((cell, i) => {
         if (i === 1) return;
         if (String(cell).startsWith('http')) {
-          html += `<td class="px-3"><a href="${cell}" target="_blank" class="btn-open">Open Link</a></td>`;
-        } else {
+  // ปรับปรุงปุ่ม Open: เพิ่มสี, ตัวหนา, และเงา
+  html += `<td class="px-3 text-center">
+            <a href="${cell}" target="_blank" 
+               style="
+                display: inline-block;
+                background: linear-gradient(135deg, #1fa87a, #157347); /* สีเขียว gradient */
+                color: white !important;
+                padding: 6px 16px;
+                border-radius: 20px;
+                text-decoration: none;
+                font-weight: bold; /* ตัวหนังสือหนา */
+                font-size: 14px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* เพิ่ม Drop Shadow */
+                transition: all 0.3s ease;
+               "
+               onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 15px rgba(0,0,0,0.2)';"
+               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 10px rgba(0,0,0,0.15)';"
+            >Open</a>
+          </td>`;
+} else {
           html += `<td class="px-3" style="color: inherit !important;">${cell || '-'}</td>`;
         }
       });
