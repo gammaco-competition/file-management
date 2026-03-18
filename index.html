@@ -38,21 +38,38 @@
     .loader { border: 3px solid #f3f3f3; border-top: 3px solid var(--primary-color); border-radius: 50%; width: 35px; height: 35px; animation: spin 1s linear infinite; margin: 50px auto; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     .btn-open-modern {
-     display: inline-block;
-     background: #1fa87a;
-     color: white !important;
-     padding: 5px 15px;
-     border-radius: 50px;
-     text-decoration: none;
-     font-weight: bold; /* ตัวหนา */
-     box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* เงา */
-     transition: 0.3s;
+      display: inline-block;
+      background: #1fa87a;
+      color: white !important;
+      padding: 5px 15px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: bold; /* ตัวหนา */
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* เงา */
+      transition: 0.3s;
     }
-   .btn-open-modern:hover {
-     transform: translateY(-2px);
-     box-shadow: 0 6px 12px rgba(0,0,0,0.25);
-     background: #157347;
-   }
+    .btn-open-modern:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+      background: #157347;
+    }
+    #mainTable tbody tr {
+      height: 60px; /* เพิ่มความสูงคงที่เล็กน้อย */
+     transition: background 0.2s;
+    }
+    #mainTable tbody tr:hover {
+     background-color: #f8fafc; /* ไฮไลท์แถวเมื่อเมาส์ชี้ */
+    }
+    .color-group { 
+    display: inline-flex; 
+    align-items: center; 
+    background: #fff; 
+    border: 1px solid #e2e8f0; 
+    border-radius: 20px; /* ปรับให้โค้งมนเท่ากับปุ่ม Open */
+    padding: 2px 8px; /* เพิ่มพื้นที่ด้านข้าง */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+}
+    
   </style>
 </head>
 <body>
@@ -251,17 +268,12 @@
                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)';"
             >Open</a>
           </td>`;
-} else {
-          html += `<td class="px-3" style="color: inherit !important;">${cell || '-'}</td>`;
-        }
-      });
-      html += `<td class="text-center">
-                <div class="color-group">
-                  <div class="color-picker-wrapper" style="background: ${savedColor}"><input type="color" class="color-picker-input" value="${savedColor}" onchange="updateColor(this, '${rowKey}')"></div>
-                  <input type="text" class="hex-input" value="${savedColor}" onchange="updateHex(this, '${rowKey}')">
-                </div>
-               </td></tr>`;
-    });
+} else } else {
+    // ถ้าเป็นคอลัมน์ Link แต่ไม่มีข้อมูล ให้จัดกึ่งกลางและใส่สีจางๆ
+    const isLinkColumn = headers[i]?.toLowerCase().includes('link');
+    const displayValue = cell || '-';
+    html += `<td class="${isLinkColumn ? 'text-center' : 'px-3'}" style="color: #cbd5e1 !important;">${displayValue}</td>`;
+});
     tbody.innerHTML = html; renderPagination();
   }
 
