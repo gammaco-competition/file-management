@@ -230,7 +230,13 @@
 
   function renderTable() {
     const tbody = document.getElementById('tableBody');
-    let headHtml = headers.map((h, i) => i !== 1 ? `<th class="px-3 py-3">${h}</th>` : '').join('');
+    // ปรับ Header ให้ Link อยู่ตรงกลาง
+    let headHtml = headers.map((h, i) => {
+      if (i === 1) return '';
+      const isLink = h.toLowerCase().includes('link');
+      return `<th class="px-3 py-3 ${isLink ? 'text-center' : ''}">${h}</th>`;
+    }).join('');
+    
     headHtml += `<th width="120" class="text-center">Color Font</th>`;
     document.getElementById('tableHead').innerHTML = headHtml;
     
@@ -239,42 +245,63 @@
     let html = ''; let lastEvent = '';
     
     paginatedData.forEach(row => {
-      const rowKey = row.join('|'); const savedColor = rowColors[rowKey] || '#334155';
+      const rowKey = row.join('|'); 
+      const savedColor = rowColors[rowKey] || '#334155';
+      
       if (currentFilter === 'all' && row[1] !== lastEvent) {
         html += `<tr class="event-divider-row"><td colspan="${headers.length}" class="event-divider">📁 ${row[1]}</td></tr>`;
         lastEvent = row[1];
       }
+      
       html += `<tr style="color: ${savedColor} !important;">`;
+      
       row.forEach((cell, i) => {
         if (i === 1) return;
+        
         if (String(cell).startsWith('http')) {
-   // เพิ่ม text-center เข้าไปที่ <td> เพื่อให้ปุ่มอยู่กึ่งกลางคอลัมน์
-   html += `<td class="text-center px-3" style="vertical-align: middle;">
-            <a href="${cell}" target="_blank" 
-               style="
-                display: inline-block;
-                background: linear-gradient(135deg, #1fa87a, #157347);
-                color: white !important;
-                padding: 6px 20px;
-                border-radius: 20px;
-                text-decoration: none;
-                font-weight: bold;
-                font-size: 14px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-                transition: 0.3s;
-                min-width: 80px; /* กำหนดความกว้างขั้นต่ำให้ปุ่มดูสมดุล */
-               "
-               onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 12px rgba(0,0,0,0.2)';"
-               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)';"
-            >Open</a>
-          </td>`;
-} else } else {
-    // ถ้าเป็นคอลัมน์ Link แต่ไม่มีข้อมูล ให้จัดกึ่งกลางและใส่สีจางๆ
-    const isLinkColumn = headers[i]?.toLowerCase().includes('link');
-    const displayValue = cell || '-';
-    html += `<td class="${isLinkColumn ? 'text-center' : 'px-3'}" style="color: #cbd5e1 !important;">${displayValue}</td>`;
-});
-    tbody.innerHTML = html; renderPagination();
+          // กรณีมี Link: แสดงปุ่ม Open ตรงกลาง
+          html += `<td class="text-center px-3" style="vertical-align: middle;">
+                    <a href="${cell}" target="_blank" 
+                       style="
+                        display: inline-block;
+                        background: linear-gradient(135deg, #1fa87a, #157347);
+                        color: white !important;
+                        padding: 6px 20px;
+                        border-radius: 20px;
+                        text-decoration: none;
+                        font-weight: bold;
+                        font-size: 14px;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+                        transition: 0.3s;
+                        min-width: 80px;
+                       "
+                       onmouseover="this.style.transform='translateY(-2px)';"
+                       onmouseout="this.style.transform='translateY(0)';"
+                    >Open</a>
+                  </td>`;
+        } else {
+          // กรณีไม่มี Link หรือเป็นข้อความปกติ
+          const isLinkColumn = headers[i]?.toLowerCase().includes('link');
+          const displayValue = cell || '-';
+          html += `<td class="${isLinkColumn ? 'text-center' : 'px-3'}" style="color: inherit !important; vertical-align: middle;">
+                    ${displayValue}
+                  </td>`;
+        }
+      });
+      
+      // ส่วนของ Color Picker
+      html += `<td class="text-center">
+                <div class="color-group">
+                  <div class="color-picker-wrapper" style="background: ${savedColor}">
+                    <input type="color" class="color-picker-input" value="${savedColor}" onchange="updateColor(this, '${rowKey}')">
+                  </div>
+                  <input type="text" class="hex-input" value="${savedColor}" onchange="updateHex(this, '${rowKey}')">
+                </div>
+               </td></tr>`;
+    });
+    
+    tbody.innerHTML = html; 
+    renderPagination();
   }
 
   function updateColor(input, key) {
